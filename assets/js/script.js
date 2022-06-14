@@ -5,6 +5,7 @@ var tasksToDoEl = document.querySelector("#tasks-to-do");
 var tasksInProgressEl = document.querySelector("#tasks-in-progress");
 var tasksCompletedEl = document.querySelector("#tasks-completed");
 var pageContentEl = document.querySelector("#page-content");
+var tasks = [];
 
 var taskFormHandler = function(event) {
   event.preventDefault();
@@ -27,7 +28,8 @@ var taskFormHandler = function(event) {
   } else {
     var taskDataObj = {
       name: taskNameInput,
-      type: taskTypeInput
+      type: taskTypeInput,
+      status: "to do"
     };
 
     createTaskEl(taskDataObj);
@@ -48,7 +50,12 @@ var createTaskEl = function(taskDataObj) {
   listItemEl.appendChild(taskActionsEl);
   tasksToDoEl.appendChild(listItemEl);
 
+  taskdDataObject.id = taskIdCounter;
+  tasks.push(taskDataObj);
+
   taskIdCounter++;
+  console.log(taskDataObj);
+  console.log(taskDataObj.status);
 };
 
 var createTaskActions = function(taskId) {
@@ -89,6 +96,13 @@ var completeEditTask = function(taskName, taskType, taskId) {
   taskSelected.querySelector("h3.task-name").textContent = taskName;
   taskSelected.querySelector("span.task-type").textContent = taskType;
 
+  for (var i = 0; i < tasks.length; i++) {
+    if (tasks[i].id === parseInt(taskId)) {
+      tasks[i].name = taskName;
+      tasks[i].type = taskType;
+    }
+  };
+
   alert("Task Updated!");
 
   formEl.removeAttribute("data-task-id");
@@ -124,7 +138,12 @@ var taskStatusChangeHandler = function(event) {
     tasksInProgressEl.appendChild(taskSelected);
   } else if (statusValue === "completed") {
     tasksCompletedEl.appendChild(taskSelected);
+  } for (var i = 0; i < tasks.length; i++) {
+    if (tasks[i].id === parseInt(taskId)) {
+      tasks[i].status = statusValue;
+    }
   }
+  console.log(tasks);
 };
 
 var editTask = function(taskId) {
@@ -149,6 +168,15 @@ var deleteTask = function(taskId) {
   console.log(taskId);
   var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
   taskSelected.remove();
+  var updatedTaskArr = [];
+
+for (var i = 0; i < tasks.length; i++) {
+  if (tasks[i].id !== parseInt(taskId)) {
+    updatedTaskArr.push(tasks[i]);
+  }
+}
+
+tasks = updatedTaskArr;
 };
 
 formEl.addEventListener("submit", taskFormHandler);
