@@ -54,8 +54,6 @@ var createTaskEl = function(taskDataObj) {
   tasks.push(taskDataObj);
 
   taskIdCounter++;
-  console.log(taskDataObj);
-  console.log(taskDataObj.status);
 };
 
 var createTaskActions = function(taskId) {
@@ -124,7 +122,6 @@ var taskButtonHandler = function(event) {
 };
 
 var taskStatusChangeHandler = function(event) {
-  console.log(event.target.value);
 
   var taskId = event.target.getAttribute("data-task-id");
 
@@ -143,7 +140,6 @@ var taskStatusChangeHandler = function(event) {
       tasks[i].status = statusValue;
     }
   }
-  console.log(tasks);
 };
 
 var editTask = function(taskId) {
@@ -178,6 +174,10 @@ for (var i = 0; i < tasks.length; i++) {
 
 tasks = updatedTaskArr;
 };
+
+var saveTasks = function() {
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+}
 
 formEl.addEventListener("submit", taskFormHandler);
 
